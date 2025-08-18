@@ -1,12 +1,37 @@
 ####write a moving average function wih a regularization penalty
 rm(list = ls())
-library(StatsChitran)
-library(rgenoud)
-library(microbenchmark)
 #library(parallel)
 ClearPlot()
 movavg.reg <- function(X, Y, bn, fn, lambda, ord.min = 1, ord.max = 40, pl = T, grid.search = T){
 
+  ##Library Import
+  library(StatsChitran)
+  library(rgenoud)
+  ##Error check
+  if(!is.numeric(lambda)){
+    stop('Argument lambda needs to be of type numeric')
+  }
+  if(!is.logical(pl)){
+    stop('Argument pl needs to be a boolean bit')
+  }
+  if(length(pl) != 1){
+    stop('Argument pl needs to be a boolean bit')
+  }
+  if( (ord.min%%1 != 0) | (ord.max%%1 != 0) ){
+    stop('Arguments ord.min and ord.max need to be integers')
+  }
+  if( (ord.min <= 0) | (ord.max <= 0) ){
+    stop('Arguments ord.min and ord.max need to be positive integers')
+  }
+  if(ord.min > ord.max){
+    stop('Argument ord.min needs to be less than or equal to ord.max')
+  }
+  if(!is.logical(grid.search)){
+    stop('Argument grid.search should be a boolean bit')
+  }
+  if(length(grid.search) != 1){
+    stop('Argument grid.search should be a boolean bit')
+  }
   ##The order function which returns the objective function (SSE + regularazation term)
   obj.fun <- function(ord){
     ord <- round(ord)
@@ -27,7 +52,7 @@ movavg.reg <- function(X, Y, bn, fn, lambda, ord.min = 1, ord.max = 40, pl = T, 
     L_ret[[1]] <- L
     L_ret[[2]] <- df
     L_ret[[3]] <- L$par
-    names(L_ret) <-
+    names(L_ret) <- c('optim-data', 'smoothed-dataframe', 'par')
       if(pl){
         plot(X, Y)
         lines(df$X, df$Y, col = 'red')
@@ -50,6 +75,7 @@ movavg.reg <- function(X, Y, bn, fn, lambda, ord.min = 1, ord.max = 40, pl = T, 
     L_ret[[1]] <- df_grid
     L_ret[[2]] <- df
     L_ret[[3]] <- df_grid$ord.val[df_grid$ord.reg == min(df_grid$ord.reg)]
+    names(L_ret) <- c('GridOfVariance', 'smoothed-dataframe', 'par')
     return(L_ret)
   }
 
@@ -80,5 +106,5 @@ plot(df$X, df$Y)
 lines(dfm1$X, dfm1$Y, col = 'red')
 lines(dfm2$X, dfm2$Y, col = 'green')
 #L <- movavg.reg(X = df$X, Y = df$Y, bn = 3, fn = 3, ord.min = 50, ord.max = 200, lambda = 0.1, grid.search = F)
-microbenchmark::microbenchmark(run = movavg.reg(X = df$X, Y = df$Y, bn = 3, fn = 3, ord.min = 50, ord.max = 200, lambda = 0.05, grid.search = T), times = 1)
+L <- movavg.reg(X = df$X, Y = df$Y, bn = 3, fn = 3, ord.min = 50, ord.max = 200, lambda = 0.05, grid.search = T)
 #lines(df$X, df$Y1)
