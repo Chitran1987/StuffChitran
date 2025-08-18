@@ -2,7 +2,7 @@ rm(list=ls())
 library(StatsChitran)
 
 ###create the noisy dataset -------- #################
-X <- seq(-10, 10, by=0.5)
+X <- seq(-10, 10, by=0.25)
 noise.data <- function(X){
   G1 <- gauss(X, amp = 3, mu = -3, sig = 2, probability = F)
   L1 <- gauss(X, amp = sqrt(3), mu=5, sig = 3, probability = F)
@@ -53,9 +53,9 @@ fit.kernel <- function(df, lambda, sdev){
 
 
 
-L <- fit.kernel(df, lambda = 0, sdev = 0.1)
-L1 <- fit.kernel(df, lambda = 0.1, sdev = 0.1)
+L <- fit.kernel(df, lambda = 0, sdev = 0.25)
+L1 <- fit.kernel(df, lambda = 1, sdev = 0.25)
 #lines(X, L$par, col = 'red')
 lines(X, L1$par, col = 'green')
 #df_m <- movavg(X, df$Y, 3, 3)
-#lines(X, df_m$Y, col = 'blue')
+lines(X, L$par, col = 'blue')
