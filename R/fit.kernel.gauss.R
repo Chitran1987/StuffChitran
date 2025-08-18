@@ -54,8 +54,10 @@ fit.kernel <- function(df, lambda, sdev){
 
 
 L <- fit.kernel(df, lambda = 0, sdev = 0.25)
-L1 <- fit.kernel(df, lambda = 1, sdev = 0.25)
+L1 <- fit.kernel(df, lambda = 10^4, sdev = 0.25)
 #lines(X, L$par, col = 'red')
 lines(X, L1$par, col = 'green')
 #df_m <- movavg(X, df$Y, 3, 3)
 lines(X, L$par, col = 'blue')
+df_mvavg <- movavg(df$X, df$Y, bn = 3, fn = 3)
+lines(df_mvavg$X, df_mvavg$Y, col = 'red')
