@@ -32,6 +32,7 @@ movavg.reg <- function(X, Y, bn, fn, lambda, ord.min = 1, ord.max = 40, pl = T, 
   if(length(grid.search) != 1){
     stop('Argument grid.search should be a boolean bit')
   }
+
   ##The order function which returns the objective function (SSE + regularazation term)
   obj.fun <- function(ord){
     ord <- round(ord)
