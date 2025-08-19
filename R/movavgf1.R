@@ -78,15 +78,28 @@ library(StatsChitran)
 df <- noisy.gaussians
 
 
-##define the averaging function
+##define the kernel function (lorentzian)
 lor.avg <- function(v){
   return(lorentz(X = v, x_0 = 0, gamm = 1, probability = T))
 }
 
+##divide the plot into two
+subplot(c(1,2))
+
+##plot the kernel function
+Y_kernel <- lor.avg(df$X)
+plot(df$X, Y_kernel, type = 'l', col = 'red', main = 'The lorentzian kernel')
+abline(v = 0)
+
+
+##Perform kernel smoothening of ord = 1, 10, 100
 df1 <- movavgf1(X = df$X, Y = df$Y, bn=3, fn=3, f = lor.avg, val = 0, ord = 1)
 df2 <- movavgf1(X = df$X, Y = df$Y, bn=3, fn=3, f = lor.avg, val = 0, ord = 10)
 df3 <- movavgf1(X = df$X, Y = df$Y, bn=3, fn=3, f = lor.avg, val = 0, ord = 100)
-plot(df$X, df$Y)
+
+##Plot the smoothed dataframes against the main data
+plot(df$X, df$Y, main = 'Data Processing')
 lines(df1$X, df1$Y, col = 'green')
 lines(df2$X, df2$Y, col = 'red')
 lines(df3$X, df3$Y, col = 'blue')
+legend(x = 'topright', legend = c('data', 'smooth. ord = 1', 'smooth. ord = 10', 'smooth. ord = 100'), fill = c('black', 'green', 'red', 'blue'))
