@@ -17,7 +17,7 @@ success.prob <- function(p, n, pl=T){
   df <- data.frame(X,Y)
   names(df) <- c('trials', 'probability of success')
   if (pl){
-    plot(X, Y, xlab='no of trials', ylab = 'probability of success', ylim=c(-0.0,1))
+    plot(X, Y, xlab='no of trials', ylab = 'probability of at least one successful event', ylim=c(-0.0,1))
   }
   return(df)
 }
